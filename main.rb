@@ -40,7 +40,7 @@ def apcacces_stat(statname)
   stdout, stderr, status = Open3.capture3(cmd)
 
   if status.success?
-    stdout.to_f
+    stdout
   else
     puts "Error running apcaccess: #{stderr}"
   end
@@ -57,15 +57,17 @@ ONLINE_STATUS = "ONLINE".freeze
 
 loop do
   if apcacces_stat("STATUS") == ONLINE_STATUS
+    puts "UPS Online"
     report_metric("status", 1)
   else
+    puts "UPS Not Online"
     report_metric("status", 0)
   end
 
   STATUSES.each do |statname|
     value = apcacces_stat(statname)
     puts "#{statname}: #{value}"
-    report_metric(statname.downcase, value)
+    report_metric(statname.downcase, value.to_f)
   end
   sleep 60
 end
