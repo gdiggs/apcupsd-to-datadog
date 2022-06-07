@@ -40,7 +40,7 @@ def apcacces_stat(statname)
   stdout, stderr, status = Open3.capture3(cmd)
 
   if status.success?
-    stdout
+    stdout.strip
   else
     puts "Error running apcaccess: #{stderr}"
   end
