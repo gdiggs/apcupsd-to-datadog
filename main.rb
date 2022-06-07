@@ -61,8 +61,11 @@ else
   report_metric("status", 0)
 end
 
-STATUSES.each do |statname|
-  value = apcacces_stat(statname)
-  puts "#{statname}: #{value}"
-  report_metric(statname.downcase, value)
+loop do
+  STATUSES.each do |statname|
+    value = apcacces_stat(statname)
+    puts "#{statname}: #{value}"
+    report_metric(statname.downcase, value)
+  end
+  sleep 60
 end
