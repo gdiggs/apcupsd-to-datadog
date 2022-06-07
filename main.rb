@@ -55,13 +55,13 @@ STATUSES = %w[
 
 ONLINE_STATUS = "ONLINE".freeze
 
-if apcacces_stat("STATUS") == ONLINE_STATUS
-  report_metric("status", 1)
-else
-  report_metric("status", 0)
-end
-
 loop do
+  if apcacces_stat("STATUS") == ONLINE_STATUS
+    report_metric("status", 1)
+  else
+    report_metric("status", 0)
+  end
+
   STATUSES.each do |statname|
     value = apcacces_stat(statname)
     puts "#{statname}: #{value}"
