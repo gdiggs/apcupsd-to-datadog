@@ -46,6 +46,13 @@ def apcacces_stat(statname)
   end
 end
 
+def power_draw
+  nominal_power = apcaccess_stat("NOMPOWER").to_f
+  load_pct = apcaccess_stat("LOADPCT").to_f / 100.0
+
+  nominal_power * load_pct
+end
+
 STATUSES = %w[
   LOADPCT
   BCHARGE
@@ -69,5 +76,9 @@ loop do
     puts "#{statname}: #{value}"
     report_metric(statname.downcase, value.to_f)
   end
+
+  pwr = power_draw
+  puts "POWERDRAW: #{pwr}"
+  report_metric("powerdraw", pwr)
   sleep 60
 end
