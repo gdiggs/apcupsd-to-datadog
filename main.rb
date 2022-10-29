@@ -34,7 +34,7 @@ rescue StandardError => e
   puts "Error sending metric: #{e.class}: #{e}"
 end
 
-def apcacces_stat(statname)
+def apcaccess_stat(statname)
   cmd = "apcaccess -p '#{statname}' -u status '#{ENV.fetch("APCUPSD_HOST")}'"
 
   stdout, stderr, status = Open3.capture3(cmd)
@@ -63,7 +63,7 @@ STATUSES = %w[
 ONLINE_STATUS = "ONLINE".freeze
 
 loop do
-  if apcacces_stat("STATUS") == ONLINE_STATUS
+  if apcaccess_stat("STATUS") == ONLINE_STATUS
     puts "UPS Online"
     report_metric("status", 1)
   else
@@ -72,7 +72,7 @@ loop do
   end
 
   STATUSES.each do |statname|
-    value = apcacces_stat(statname)
+    value = apcaccess_stat(statname)
     puts "#{statname}: #{value}"
     report_metric(statname.downcase, value.to_f)
   end
